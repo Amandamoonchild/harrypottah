@@ -9,7 +9,7 @@ app.use(express.json());
 const pool = new Pool({
     user: 'postgres',
     host: 'localhost',
-    database: 'holistc_task',
+    database: 'harrypottah',
     password: 'ds564',
     port: '5432',
 });
@@ -29,7 +29,7 @@ app.get('/bruxo', async (req, res) => {
 
 app.post('/bruxo', async(req, res) => {
     try {
-        const {nome, email} = req.body;
+        const {nome, idade, casa, habilidade, sangue, patrono} = req.body;
         await pool.query('INSERT INTO bruxos (nome, idade, casa, habilidade, sangue, patrono) VALUES ($1, $2, $3, $4, $5, $6)', [nome, idade, casa, habilidade, sangue, patrono])
         res.status(201).send({mensagem: 'Sucesso ao criar bruxo 😎'})
     } catch (error) {
@@ -63,13 +63,32 @@ app.put('/bruxo/:id', async(req, res) =>{
 
 app.get('/bruxo/:id', async(req, res) =>{
     try {
-        const {id} = req.params;
-        const {nome, idade, casa, habilidade, sangue, patrono} = req.body;
-        await pool.query('SELECT * FROM bruxo WHERE id = $1', [id]);
-        res.status(200).send({mensagem: 'Sucesso ao selecionar bruxo 😎'})
+        const { id } = req.params;
+        const resultado = await pool.query('SELECT * FROM bruxo WHERE id = $1', [id]);
+        if (resultado.rowCount === 0) {
+            res.status(404).send({ mensagem: 'Bruxo não encontrado' });
+        } else {
+            res.status(200).json(resultado.rows[0]);
+        }
     } catch (error) {
-        console.error('Erro ao selecionar o usuario 😲');
-        res.status(404).send({mensagem: 'Erro ao selecionar o bruxo 😲'})
+        console.error('Erro ao selecionar o bruxo 😲', error);
+        res.status(500).send({ mensagem: 'Erro ao selecionar o bruxo 😲' })
+    }
+})
+
+
+app.get('/bruxo/:nome', async(req, res) =>{
+    try {
+        const { nome } = req.params;
+        const resultado = await pool.query('SELECT * FROM bruxo WHERE nome = $1', [nome]);
+        if (resultado.rowCount === 0) {
+            res.status(404).send({ mensagem: `Bruxo ${nome} não encontrado` });
+        } else {
+            res.status(200).json(resultado.rows[0]);
+        }
+    } catch (error) {
+        console.error('Erro ao selecionar o bruxo por nome 😲', error);
+        res.status(500).send({ mensagem: `Erro ao selecionar bruxo ${nome}` })
     }
 })
 
