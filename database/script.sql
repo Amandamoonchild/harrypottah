@@ -1,6 +1,6 @@
-CREATE DATABASE harrypottah;
+CREATE DATABASE harry;
 
-CREATE TABLE bruxo (
+CREATE TABLE bruxin (
     id SERIAL PRIMARY KEY,
     nome VARCHAR(100) NOT NULL,
     idade INT,
@@ -10,7 +10,7 @@ CREATE TABLE bruxo (
     patrono VARCHAR(100) NOT NULL
 );
 
-INSERT INTO bruxo (nome, idade, casa, habilidade, sangue, patrono) VALUES ('Amanda', '17', 'Lufa-lufa', 'Animagia', 'Mestiço', 'lontra');
+INSERT INTO bruxin (nome, idade, casa, habilidade, sangue, patrono) VALUES ('Amanda', '17', 'Lufa-lufa', 'Animagia', 'Mestiço', 'lontra');
 
 CREATE TABLE varinha (
     id SERIAL PRIMARY KEY,
